@@ -30,6 +30,7 @@ public class OrderRest {
     private OrderServiceImpl orderService;
 
     @GET
+    @Path("/finaAllOrders")
     public List<Order> findAll() throws WebException {
         List<Order> orders = null;
         try {
@@ -41,6 +42,7 @@ public class OrderRest {
     }
 
     @POST
+    @Path("/createOrder")
     public Order create(Order order) throws WebException {
         try {
             order = orderService.create(order);
@@ -51,6 +53,7 @@ public class OrderRest {
     }
 
     @PUT
+    @Path("/updateOrder")
     public Order update(Order order) throws WebException {
         try {
             order = orderService.update(order);
@@ -60,8 +63,21 @@ public class OrderRest {
         return order;
     }
 
+    @PUT
+    @Path("/orderId={orderId}/isDone={isDone}")
+    public Order updateStatus(@PathParam("orderId") int orderId, @PathParam("isDone") boolean isDone)
+            throws WebException {
+        Order order = null;
+        try {
+            order = orderService.updateStatus(orderId, isDone);
+        } catch (DomainException e) {
+            throw new WebException("Cannot update order=" + order + " orderId=" + orderId + " and isDone=" + isDone, e);
+        }
+        return order;
+    }
+
     @DELETE
-    @Path("/{orderId}")
+    @Path("/orderId={orderId}")
     public void delete(@PathParam("orderId") int orderId) throws WebException {
         try {
             orderService.delete(orderId);

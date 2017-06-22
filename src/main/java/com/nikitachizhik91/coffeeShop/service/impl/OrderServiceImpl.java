@@ -54,6 +54,18 @@ public class OrderServiceImpl {
         return lessonTemp;
     }
 
+    public Order updateStatus(int orderId, boolean isDone) throws DomainException {
+        Order orderTemp = null;
+        try {
+            orderTemp = orderDao.findById(orderId);
+            orderTemp.setDone(isDone);
+            orderTemp = orderDao.update(orderTemp);
+        } catch (DaoException e) {
+            throw new DomainException("Cannot update status order id=" + orderId + " and isDone=" + isDone, e);
+        }
+        return orderTemp;
+    }
+
     public void delete(int orderId) throws DomainException {
         try {
             orderDao.delete(orderId);

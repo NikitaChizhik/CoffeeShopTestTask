@@ -21,8 +21,20 @@ public class OrderDaoHibernate {
         List<Order> orders = null;
         try (Session session = sessionFactory.openSession()) {
             orders = (List<Order>) session.createQuery("from Order").list();
+        } catch (Exception e) {
+            throw new DaoException("Cannot find all orders=" + orders, e);
         }
         return orders;
+    }
+
+    public Order findById(int orderId) throws DaoException {
+        Order order = null;
+        try (Session session = sessionFactory.openSession()) {
+            order = session.get(Order.class, orderId);
+        } catch (Exception e) {
+            throw new DaoException("Cannot find order by id=" + orderId, e);
+        }
+        return order;
     }
 
     public Order create(Order order) throws DaoException {
