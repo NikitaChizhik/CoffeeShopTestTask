@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.nikitachizhik91.coffeeShop.dao.DaoException;
+import com.nikitachizhik91.coffeeShop.dao.SortOfCoffeeDao;
 import com.nikitachizhik91.coffeeShop.model.SortOfCoffee;
 
 @Repository
-public class SortOfCoffeeDaoHibernate {
+public class SortOfCoffeeDaoHibernate implements SortOfCoffeeDao {
 
     @Autowired
     private SessionFactory sessionFactory;

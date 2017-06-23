@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.nikitachizhik91.coffeeShop.dao.DaoException;
+import com.nikitachizhik91.coffeeShop.dao.OrderDao;
 import com.nikitachizhik91.coffeeShop.model.Order;
 
 @Repository
-public class OrderDaoHibernate {
+public class OrderDaoHibernate implements OrderDao {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -35,6 +36,17 @@ public class OrderDaoHibernate {
             throw new DaoException("Cannot find order by id=" + orderId, e);
         }
         return order;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Order> findOrdersInProcess() throws DaoException {
+        List<Order> orders = null;
+        try (Session session = sessionFactory.openSession()) {
+            orders = (List<Order>) session.createQuery("from Order where isDone = false").list();
+        } catch (Exception e) {
+            throw new DaoException("Cannot find orders in process." + orders, e);
+        }
+        return orders;
     }
 
     public Order create(Order order) throws DaoException {

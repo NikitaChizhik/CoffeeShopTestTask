@@ -17,7 +17,7 @@ import org.springframework.stereotype.Controller;
 
 import com.nikitachizhik91.coffeeShop.model.Order;
 import com.nikitachizhik91.coffeeShop.service.DomainException;
-import com.nikitachizhik91.coffeeShop.service.impl.OrderServiceImpl;
+import com.nikitachizhik91.coffeeShop.service.OrderService;
 import com.nikitachizhik91.coffeeShop.web.WebException;
 
 @Controller
@@ -27,16 +27,28 @@ import com.nikitachizhik91.coffeeShop.web.WebException;
 public class OrderRest {
 
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @GET
-    @Path("/finaAllOrders")
+    @Path("/findAllOrders")
     public List<Order> findAll() throws WebException {
         List<Order> orders = null;
         try {
             orders = orderService.findAll();
         } catch (DomainException e) {
             throw new WebException("Cannot find all orders.", e);
+        }
+        return orders;
+    }
+
+    @GET
+    @Path("/findOrdersInProcess")
+    public List<Order> findOrdersInProcess() throws WebException {
+        List<Order> orders = null;
+        try {
+            orders = orderService.findOrdersInProcess();
+        } catch (DomainException e) {
+            throw new WebException("Cannot find orders in process.", e);
         }
         return orders;
     }

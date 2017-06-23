@@ -6,15 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nikitachizhik91.coffeeShop.dao.DaoException;
-import com.nikitachizhik91.coffeeShop.dao.hibernate.OrderDaoHibernate;
+import com.nikitachizhik91.coffeeShop.dao.OrderDao;
 import com.nikitachizhik91.coffeeShop.model.Order;
 import com.nikitachizhik91.coffeeShop.service.DomainException;
+import com.nikitachizhik91.coffeeShop.service.OrderService;
 
 @Service
-public class OrderServiceImpl {
+public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private OrderDaoHibernate orderDao;
+    private OrderDao orderDao;
 
     public List<Order> findAll() throws DomainException {
         List<Order> orders = null;
@@ -22,6 +23,16 @@ public class OrderServiceImpl {
             orders = orderDao.findAll();
         } catch (DaoException e) {
             throw new DomainException("Cannot find all orders.", e);
+        }
+        return orders;
+    }
+
+    public List<Order> findOrdersInProcess() throws DomainException {
+        List<Order> orders = null;
+        try {
+            orders = orderDao.findOrdersInProcess();
+        } catch (DaoException e) {
+            throw new DomainException("Cannot find orders in process.", e);
         }
         return orders;
     }
